@@ -12,9 +12,6 @@ from collections import OrderedDict
 import argparse
 
 from flask import Flask
-from flask._compat import text_type
-
-from ._compat import iteritems
 from .commands import Group, Option, Command, Server, Shell
 from .cli import prompt, prompt_pass, prompt_bool, prompt_choices
 
@@ -373,11 +370,11 @@ class Manager(object):
                                if handle is last_func or action.__class__ in safe_actions]
 
             # pass only safe app config keys
-            config = dict((k, v) for k, v in iteritems(kwargs)
+            config = dict((k, v) for k, v in kwargs.items()
                           if k in config_keys)
 
             # remove application config keys from handle kwargs
-            kwargs = dict((k, v) for k, v in iteritems(kwargs)
+            kwargs = dict((k, v) for k, v in kwargs.items()
                           if k not in config_keys)
 
             if handle is last_func and getattr(last_func, 'capture_all_args', False):
@@ -409,7 +406,7 @@ class Manager(object):
             self._commands.update(commands)
 
         # Make sure all of this is Unicode
-        argv = list(text_type(arg) for arg in sys.argv)
+        argv = list(str(arg) for arg in sys.argv)
         if default_command is not None and len(argv) == 1:
             argv.append(default_command)
 
